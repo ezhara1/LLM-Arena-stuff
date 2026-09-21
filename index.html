@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101713" />
+    <title>Steel Horizon // Armored Assault</title>
+  </head>
+  <body>
+    <main id="app">
+      <canvas id="game-canvas" aria-label="Steel Horizon 3D combat arena"></canvas>
+
+      <div id="vignette" aria-hidden="true"></div>
+      <div id="damage-flash" aria-hidden="true"></div>
+
+      <header class="topbar hud-layer">
+        <div class="brand-lockup">
+          <div class="brand-mark"><span></span><span></span><span></span></div>
+          <div>
+            <div class="eyebrow">ARMORED COMBAT SYSTEMS</div>
+            <h1>STEEL <b>HORIZON</b></h1>
+          </div>
+        </div>
+        <div class="mission-readout">
+          <div class="eyebrow">ACTIVE SECTOR</div>
+          <strong>07 <span>//</span> IRON YARD</strong>
+        </div>
+        <div class="top-status">
+          <div class="status-light"></div>
+          <span>LIVE LINK</span>
+          <i></i>
+          <span id="clock">00:00</span>
+        </div>
+      </header>
+
+      <section class="objective-card hud-layer">
+        <div class="card-kicker"><span class="kicker-dot"></span>FIELD OBJECTIVE</div>
+        <div id="objective-title" class="objective-title">CLEAR THE IRON YARD</div>
+        <div id="objective-detail" class="objective-detail">Neutralize hostile armor before they breach the perimeter.</div>
+        <div class="objective-progress"><span id="objective-progress"></span></div>
+        <div class="progress-label"><span id="objective-count">0 / 9</span><span>HOSTILES</span></div>
+      </section>
+
+      <section class="enemy-card hud-layer">
+        <div class="card-kicker"><span class="kicker-dot danger"></span>THREAT REGISTER</div>
+        <div class="enemy-row" data-type="tank"><span class="enemy-icon tank-icon"></span><div><b>TANKS</b><small>MBT / HEAVY</small></div><strong id="tank-count">04</strong></div>
+        <div class="enemy-row" data-type="jeep"><span class="enemy-icon jeep-icon"></span><div><b>JEEPS</b><small>FAST ATTACK</small></div><strong id="jeep-count">03</strong></div>
+        <div class="enemy-row" data-type="artillery"><span class="enemy-icon artillery-icon"></span><div><b>ARTILLERY</b><small>INDIRECT FIRE</small></div><strong id="artillery-count">02</strong></div>
+      </section>
+
+      <div id="crosshair" class="crosshair hud-layer" aria-hidden="true">
+        <span class="crosshair-top"></span><span class="crosshair-right"></span><span class="crosshair-bottom"></span><span class="crosshair-left"></span>
+        <span class="crosshair-center"></span>
+      </div>
+
+      <section class="left-hud hud-layer">
+        <div class="vehicle-tag"><span class="vehicle-dot"></span><div><b>IRONCLAD-01</b><small>ASSAULT TANK // YOU</small></div></div>
+        <div class="armor-panel">
+          <div class="gauge-heading"><span>HULL INTEGRITY</span><strong id="armor-value">100%</strong></div>
+          <div class="gauge armor-gauge"><span id="armor-fill"></span><i></i><i></i><i></i><i></i></div>
+          <div class="gauge-sub"><span>REINFORCED ARMOR</span><span id="armor-state">NOMINAL</span></div>
+        </div>
+        <div class="weapon-panel">
+          <div class="gauge-heading"><span>MAIN CANNON</span><strong id="weapon-status">READY</strong></div>
+          <div class="gauge weapon-gauge"><span id="weapon-fill"></span></div>
+          <div class="gauge-sub"><span>AP / HIGH EXPLOSIVE</span><span id="ammo-count">∞  SHELLS</span></div>
+        </div>
+      </section>
+
+      <section class="right-hud hud-layer">
+        <div class="radar-heading"><span class="kicker-dot"></span>TACTICAL RADAR <small>80M</small></div>
+        <canvas id="radar" width="180" height="180"></canvas>
+        <div class="radar-legend"><span><i class="legend-you"></i>YOU</span><span><i class="legend-hostile"></i>HOSTILE</span></div>
+      </section>
+
+      <section class="event-feed hud-layer" id="event-feed" aria-live="polite"></section>
+
+      <footer class="bottom-hud hud-layer">
+        <div class="controls"><span class="key-group"><b>W A S D</b><small>DRIVE / STEER</small></span><span class="key-group"><b>MOUSE</b><small>AIM</small></span><span class="key-group"><b>CLICK</b><small>FIRE</small></span><span class="key-group"><b>SPACE</b><small>FIRE</small></span></div>
+        <div class="speed-readout"><strong id="speed-value">000</strong><span>KM/H</span></div>
+        <div class="integrity-note"><span class="signal-bars"><i></i><i></i><i></i></span> STRUCTURES: <b>BREAKABLE</b></div>
+      </footer>
+
+      <div id="start-screen" class="modal-layer">
+        <div class="modal-grid"></div>
+        <div class="briefing-card">
+          <div class="briefing-top"><span class="eyebrow">TACTICAL SIMULATION // MISSION 01</span><span class="briefing-class">CLASSIFIED</span></div>
+          <div class="briefing-mark"><span class="mark-line"></span><span class="mark-chevron">▸</span><span class="mark-line short"></span></div>
+          <h2>STEEL <em>HORIZON</em></h2>
+          <p class="briefing-lede">Drive the line. Break the cover.<br /><strong>Own the yard.</strong></p>
+          <div class="briefing-rule"></div>
+          <div class="briefing-stats"><div><b>09</b><span>HOSTILES</span></div><div><b>∞</b><span>AMMUNITION</span></div><div><b>01</b><span>ARMORED UNIT</span></div></div>
+          <button id="start-button" class="start-button"><span>ENTER THE YARD</span><b>↗</b></button>
+          <div class="briefing-hint"><span class="hint-key">WASD</span> move <span class="hint-key">MOUSE</span> aim <span class="hint-key">CLICK</span> fire</div>
+        </div>
+        <div class="modal-footer"><span>FIELD MANUAL 7.04</span><span>ARMOR STATUS: <b>REINFORCED</b></span><span>SIMULATION ONLINE</span></div>
+      </div>
+
+      <div id="game-over" class="modal-layer hidden">
+        <div class="briefing-card game-over-card">
+          <div class="eyebrow">MISSION REPORT // SECTOR 07</div>
+          <div class="briefing-mark"><span class="mark-line"></span><span class="mark-chevron">×</span><span class="mark-line short"></span></div>
+          <h2 id="game-over-title">YARD <em>SECURED</em></h2>
+          <p id="game-over-detail" class="briefing-lede">The hostile line has been broken.</p>
+          <div class="briefing-rule"></div>
+          <div class="final-score"><span>SCORE</span><strong id="final-score">000000</strong></div>
+          <button id="restart-button" class="start-button"><span>RUN IT AGAIN</span><b>↗</b></button>
+        </div>
+      </div>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
